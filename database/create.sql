@@ -1,4 +1,4 @@
--- Guitar Registry - Electric Guitar Provenance and Authentication System
+-- String Authority - Electric Guitar Provenance and Authentication System
 -- Copyright (C) 2025 Mariano Rozanski
 -- 
 -- This program is free software: you can redistribute it and/or modify
@@ -8,7 +8,7 @@
 --
 -- See LICENSE file for full license text.
 
--- Complete Database Schema - Guitar Registry with Image Management
+-- Complete Database Schema - String Authority with Image Management
 -- 
 -- PREREQUISITES:
 -- 1. PostgreSQL 15+ with uuid-ossp extension
@@ -16,9 +16,9 @@
 -- 3. Run as superuser or database owner
 --
 -- USAGE:
--- 1. Create database: CREATE DATABASE guitar_registry;
+-- 1. Create database: CREATE DATABASE string_authority;
 -- 2. Install extensions: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; CREATE EXTENSION IF NOT EXISTS "pg_uuidv7";
--- 3. Run this script: psql -d guitar_registry -f create-complete.sql
+-- 3. Run this script: psql -d string_authority -f create-complete.sql
 -- 4. Grant permissions (see end of file)
 
 -- ============================================================================
@@ -820,15 +820,15 @@ COMMENT ON FUNCTION get_images_by_storage_key IS 'Returns all images (original a
 
 -- IMPORTANT: After running this script, you need to grant permissions to your application user:
 -- 
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO guitar_registry_user;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO guitar_registry_user;
--- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO guitar_registry_user;
--- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO guitar_registry_user;
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO string_authority_user;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO string_authority_user;
+-- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO string_authority_user;
+-- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO string_authority_user;
 --
--- Replace 'guitar_registry_user' with your actual application database user.
+-- Replace 'string_authority_user' with your actual application database user.
 --
 -- Example:
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO guitar_registry_user;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO guitar_registry_user;
--- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO guitar_registry_user;
--- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO guitar_registry_user; 
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO string_authority_user;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO string_authority_user;
+-- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO string_authority_user;
+-- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO string_authority_user; 

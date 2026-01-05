@@ -562,7 +562,7 @@ uv run python image_processor.py image.jpg manufacturer 0197bdb2-23c1-72ad-b5b1-
 
 ```bash
 # Get Fender manufacturer ID
-psql -d guitar_registry -c "SELECT id, name FROM manufacturers WHERE name LIKE '%Fender%';"
+psql -d string_authority -c "SELECT id, name FROM manufacturers WHERE name LIKE '%Fender%';"
 
 # Upload logo
 uv run python image_processor.py fender-logo.png manufacturer 0197bdb2-23c1-72ad-b5b1-c77f67d4896c \
@@ -573,7 +573,7 @@ uv run python image_processor.py fender-logo.png manufacturer 0197bdb2-23c1-72ad
 
 ```bash
 # Get Stratocaster model ID
-psql -d guitar_registry -c "SELECT id, name, year FROM models WHERE name = 'Stratocaster' AND year = 1954;"
+psql -d string_authority -c "SELECT id, name, year FROM models WHERE name = 'Stratocaster' AND year = 1954;"
 
 # Upload image
 uv run python image_processor.py 1954-stratocaster.jpg model 0197bda6-49cb-7642-b812-b7b1c2af7824 \
@@ -584,7 +584,7 @@ uv run python image_processor.py 1954-stratocaster.jpg model 0197bda6-49cb-7642-
 
 ```bash
 # Get individual guitar ID
-psql -d guitar_registry -c "SELECT id, serial_number FROM individual_guitars WHERE serial_number = '12345';"
+psql -d string_authority -c "SELECT id, serial_number FROM individual_guitars WHERE serial_number = '12345';"
 
 # Upload serial number image
 uv run python image_processor.py serial-12345.jpg individual_guitar 0197bda6-49cb-7642-b812-b7b1c2af7824 \

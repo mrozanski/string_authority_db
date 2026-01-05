@@ -211,7 +211,7 @@ class GuitarImageProcessor:
             eager_async=True,
             overwrite=False,
             resource_type='image',
-            tags=['guitar_registry'],
+            tags=['string_authority'],
             context={
                 'uploaded_at': datetime.utcnow().isoformat(),
                 'processor_version': '1.0'

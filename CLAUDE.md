@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-The Electric Guitar Registry is a comprehensive data management system for cataloging, authenticating, and tracking the provenance of collectible electric guitars. The system processes guitar data through JSON validation, fuzzy matching for duplicate detection, and PostgreSQL storage with UUID v7 primary keys.
+String Authority is a comprehensive data management system for cataloging, authenticating, and tracking the provenance of collectible electric guitars. The system processes guitar data through JSON validation, fuzzy matching for duplicate detection, and PostgreSQL storage with UUID v7 primary keys.
 
 ## Development Commands
 
@@ -20,7 +20,7 @@ uv pip install psycopg2-binary jsonschema
 ### Database Setup
 ```bash
 # Create database schema
-psql -U guitar_registry_user -d guitar_registry -f database/create.sql
+psql -U string_authority_user -d string_authority -f database/create.sql
 
 # Database connection uses db_config.json or environment variables:
 # DB_HOST, DB_NAME, DB_USER, DB_PASSWORD
@@ -104,4 +104,4 @@ The system provides detailed error reporting for:
 ## Local Development Utilities
 
 ### Database Queries
-- Correct way to run PSQL queries from command line in local environment: `psql -h localhost -U guitar_registry_user -d guitar_registry -c "[SQL command here]"`
+- Correct way to run PSQL queries from command line in local environment: `psql -h localhost -U string_authority_user -d string_authority -c "[SQL command here]"`

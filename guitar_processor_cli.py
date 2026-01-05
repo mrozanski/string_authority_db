@@ -50,7 +50,7 @@ class DatabaseConfig:
         return {
             'host': os.getenv('DB_HOST', 'localhost'),
             'port': os.getenv('DB_PORT', '5432'),
-            'database': os.getenv('DB_NAME', 'guitar_registry'),
+            'database': os.getenv('DB_NAME', 'string_authority'),
             'user': os.getenv('DB_USER', 'postgres'),
             'password': os.getenv('DB_PASSWORD', 'password')
         }

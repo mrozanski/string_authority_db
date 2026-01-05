@@ -1,4 +1,4 @@
-# Electric Guitar Registry
+# String Authority
 
 A comprehensive data management system for cataloging, authenticating, and tracking the provenance of collectible electric guitars. Built for the future of instrument authentication with blockchain integration planned.
 
@@ -8,7 +8,7 @@ Building the definitive, decentralized registry for electric guitar heritage - w
 
 ## 🎸 Overview
 
-The Electric Guitar Registry addresses the fragmented landscape of vintage and collectible guitar documentation by providing:
+String Authority addresses the fragmented landscape of vintage and collectible guitar documentation by providing:
 
 - **Universal Cross-Brand Catalog**: Unlike existing brand-specific systems, this registry covers all manufacturers
 - **Intelligent Duplicate Detection**: Advanced fuzzy matching prevents data duplication across sources
@@ -61,13 +61,13 @@ The Electric Guitar Registry addresses the fragmented landscape of vintage and c
 brew install postgresql@17
 
 # Create database and user
-psql -d postgres -c "CREATE DATABASE guitar_registry OWNER guitar_registry_user;"
+psql -d postgres -c "CREATE DATABASE string_authority OWNER string_authority_user;"
 
 # Start postgres
 brew services start postgresql@17
 
 # Create user
-psql -d postgres -c "CREATE USER guitar_registry_user WITH PASSWORD 'password_here';"
+psql -d postgres -c "CREATE USER string_authority_user WITH PASSWORD 'password_here';"
 
 # Install required extensions
 cd database
@@ -77,19 +77,19 @@ make
 make install
 
 ## Grant privileges
-psql -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE guitar_registry TO guitar_registry_user;
-GRANT ALL PRIVILEGES ON SCHEMA public TO guitar_registry_user;"
+psql -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE string_authority TO string_authority_user;
+GRANT ALL PRIVILEGES ON SCHEMA public TO string_authority_user;"
 
 
 ## Create extensions
-psql -U guitar_registry_user -d guitar_registry -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
-psql -d guitar_registry -c "CREATE EXTENSION IF NOT EXISTS \"pg_uuidv7\";"
+psql -U string_authority_user -d string_authority -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+psql -d string_authority -c "CREATE EXTENSION IF NOT EXISTS \"pg_uuidv7\";"
 
 ## Create structure
-psql -U guitar_registry_user -d guitar_registry -f database/create.sql
+psql -U string_authority_user -d string_authority -f database/create.sql
 
 ## Insert test data (test data not in git)
-psql -U guitar_registry_user -d guitar_registry -f test-data/test-data.sql
+psql -U string_authority_user -d string_authority -f test-data/test-data.sql
 
 
 
@@ -99,15 +99,15 @@ psql -U guitar_registry_user -d guitar_registry -f test-data/test-data.sql
 ```bash
 # Set database connection
 export DB_HOST=localhost
-export DB_NAME=guitar_registry
-export DB_USER=guitar_registry_user
+export DB_NAME=string_authority
+export DB_USER=string_authority_user
 export DB_PASSWORD=your_password
 
 # Or create db_config.json
 {
   "host": "localhost",
-  "database": "guitar_registry", 
-  "user": "guitar_registry_user",
+  "database": "string_authority", 
+  "user": "string_authority_user",
   "password": "your_password"
 }
 ```
@@ -178,7 +178,7 @@ python guitar_processor_cli.py --interactive
 python guitar_processor_cli.py --file my_guitars.json --verbose
 
 # Expected output:
-✓ Connected to database: guitar_registry@localhost
+✓ Connected to database: string_authority@localhost
 ✓ Loaded JSON file: my_guitars.json
 🎸 Processing guitar data...
 ✓ Single Submission Result:

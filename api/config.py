@@ -1,5 +1,5 @@
 """
-Configuration management for the Guitar Registry API.
+Configuration management for the String Authority API.
 """
 
 import json
