@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Startup script for the Guitar Registry Search API.
+Startup script for the String Authority database search API.
 """
 
 import sys
@@ -16,7 +16,7 @@ def main():
     try:
         from api.app import create_app
         
-        print("🎸 Starting Guitar Registry Search API...")
+        print("🎸 Starting String Authority Database Search API...")
         
         # Create the Flask app
         app = create_app()

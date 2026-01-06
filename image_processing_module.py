@@ -1,5 +1,5 @@
 """
-Guitar Registry Image Processing Module
+String Authority Image Processing Module
 Handles image ingestion, validation, and storage management
 """
 
@@ -42,7 +42,7 @@ class ProcessedImage:
     hash: str
 
 class GuitarImageProcessor:
-    """Handles image processing for the guitar registry"""
+    """Handles image processing for String Authority database"""
     
     # Image size variants for responsive loading
     VARIANTS = {
@@ -211,7 +211,7 @@ class GuitarImageProcessor:
             eager_async=True,
             overwrite=False,
             resource_type='image',
-            tags=['guitar_registry'],
+            tags=['string_authority'],
             context={
                 'uploaded_at': datetime.utcnow().isoformat(),
                 'processor_version': '1.0'

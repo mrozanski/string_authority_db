@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Guitar Registry - Electric Guitar Provenance and Authentication System
+# String Authority Database Processor- Electric Guitar Provenance and Authentication System
 # Copyright (C) 2025 Mariano Rozanski
 #
 # This program is free software: you can redistribute it and/or modify
@@ -50,7 +50,7 @@ class DatabaseConfig:
         return {
             'host': os.getenv('DB_HOST', 'localhost'),
             'port': os.getenv('DB_PORT', '5432'),
-            'database': os.getenv('DB_NAME', 'guitar_registry'),
+            'database': os.getenv('DB_NAME', 'string_authority'),
             'user': os.getenv('DB_USER', 'postgres'),
             'password': os.getenv('DB_PASSWORD', 'password')
         }

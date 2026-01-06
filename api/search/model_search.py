@@ -1,5 +1,5 @@
 """
-Model search functionality for the Guitar Registry API.
+Model search functionality for the String Authority Database Search API.
 """
 
 from typing import Dict, List, Optional, Any, Tuple

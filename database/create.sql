@@ -1,4 +1,4 @@
--- Guitar Registry - Electric Guitar Provenance and Authentication System
+-- String Authority - Electric Guitar Provenance and Authentication System
 -- Copyright (C) 2025 Mariano Rozanski
 -- 
 -- This program is free software: you can redistribute it and/or modify
@@ -8,7 +8,7 @@
 --
 -- See LICENSE file for full license text.
 
--- Complete Database Schema - Guitar Registry with Image Management
+-- Complete Database Schema - String Authority with Image Management
 -- 
 -- PREREQUISITES:
 -- 1. PostgreSQL 15+ with uuid-ossp extension
@@ -16,9 +16,9 @@
 -- 3. Run as superuser or database owner
 --
 -- USAGE:
--- 1. Create database: CREATE DATABASE guitar_registry;
+-- 1. Create database: CREATE DATABASE string_authority;
 -- 2. Install extensions: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; CREATE EXTENSION IF NOT EXISTS "pg_uuidv7";
--- 3. Run this script: psql -d guitar_registry -f create-complete.sql
+-- 3. Run this script: psql -d string_authority -f create-complete.sql
 -- 4. Grant permissions (see end of file)
 
 -- ============================================================================
@@ -69,7 +69,16 @@ CREATE TABLE models (
     created_by VARCHAR(100),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(manufacturer_id, name, year)
+    -- EAS attestation fields
+    attestation_uid VARCHAR(66),
+    ipfs_cid VARCHAR(100),
+    attestation_status VARCHAR(20) DEFAULT 'pending',
+    attested_by VARCHAR(100),
+    attested_at TIMESTAMP WITH TIME ZONE,
+    cosigner_wallet VARCHAR(42),
+    cosigned_at TIMESTAMP WITH TIME ZONE,
+    UNIQUE(manufacturer_id, name, year),
+    CONSTRAINT check_models_attestation_status CHECK (attestation_status IN ('pending', 'official', 'revoked'))
 );
 
 -- Individual guitars table with hybrid FK + fallback approach
@@ -108,7 +117,17 @@ CREATE TABLE individual_guitars (
          (model_name_fallback IS NOT NULL OR description IS NOT NULL))
     ),
     
-    UNIQUE(serial_number)
+    -- EAS attestation fields
+    attestation_uid VARCHAR(66),
+    ipfs_cid VARCHAR(100),
+    attestation_status VARCHAR(20) DEFAULT 'pending',
+    attested_by VARCHAR(100),
+    attested_at TIMESTAMP WITH TIME ZONE,
+    cosigner_wallet VARCHAR(42),
+    cosigned_at TIMESTAMP WITH TIME ZONE,
+    
+    UNIQUE(serial_number),
+    CONSTRAINT check_individual_guitars_attestation_status CHECK (attestation_status IN ('pending', 'official', 'revoked'))
 );
 
 -- Specifications table
@@ -251,6 +270,64 @@ CREATE TABLE contributions (
 );
 
 -- ============================================================================
+-- EAS ATTESTATION TABLES
+-- ============================================================================
+
+-- Attestations tracking table
+-- Central table to track all blockchain attestations (models, instruments, future types)
+CREATE TABLE attestations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    uid VARCHAR(66) UNIQUE NOT NULL,
+    schema_uid VARCHAR(66) NOT NULL,
+    schema_type VARCHAR(50) NOT NULL, -- 'model', 'instrument', 'review', etc.
+    entity_type VARCHAR(50) NOT NULL, -- 'model', 'individual_guitar', etc.
+    entity_id UUID NOT NULL,
+    attestation_data JSONB NOT NULL,
+    ipfs_cid VARCHAR(100),
+    schema_version VARCHAR(20), -- '1.0.0', '2.0.0', etc.
+    signer_wallet VARCHAR(42) NOT NULL,
+    signer_role VARCHAR(20) DEFAULT 'admin',
+    signed_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    cosigner_wallet VARCHAR(42),
+    cosigner_role VARCHAR(20),
+    cosigned_at TIMESTAMP WITH TIME ZONE,
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT check_attestations_status CHECK (status IN ('pending', 'official', 'revoked'))
+);
+
+-- Schema versions registry table
+-- Tracks EAS schema versions and their relationships (for schema evolution)
+CREATE TABLE schema_versions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    schema_name VARCHAR(100) NOT NULL, -- 'GuitarModelAttestation', 'GuitarInstrumentAttestation'
+    version VARCHAR(20) NOT NULL, -- '1.0.0', '1.1.0', '2.0.0'
+    schema_uid VARCHAR(66) NOT NULL, -- EAS schema UID on blockchain
+    previous_version_id UUID REFERENCES schema_versions(id),
+    next_version_id UUID REFERENCES schema_versions(id),
+    changelog TEXT,
+    effective_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    deprecated_date TIMESTAMP WITH TIME ZONE,
+    status VARCHAR(20) DEFAULT 'active', -- 'active', 'deprecated'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(schema_name, version),
+    CONSTRAINT check_schema_versions_status CHECK (status IN ('active', 'deprecated'))
+);
+
+-- Manufacturer wallet registry
+-- Stores manufacturer wallet addresses for co-signing attestations
+CREATE TABLE manufacturer_wallets (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    manufacturer_id UUID NOT NULL REFERENCES manufacturers(id) ON DELETE CASCADE,
+    wallet_address VARCHAR(42) UNIQUE NOT NULL, -- Ethereum address (0x + 40 hex)
+    status VARCHAR(20) DEFAULT 'active', -- 'active', 'revoked'
+    registered_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    registered_by VARCHAR(100), -- Admin who registered the wallet
+    notes TEXT, -- Optional notes about the wallet
+    CONSTRAINT check_manufacturer_wallets_status CHECK (status IN ('active', 'revoked'))
+);
+
+-- ============================================================================
 -- IMAGE MANAGEMENT TABLES
 -- ============================================================================
 
@@ -381,7 +458,11 @@ CREATE TABLE image_sources (
 
 -- Core schema indexes
 CREATE INDEX idx_models_manufacturer_year ON models(manufacturer_id, year);
+CREATE INDEX idx_models_attestation_uid ON models(attestation_uid);
+CREATE INDEX idx_models_attestation_status ON models(attestation_status);
 CREATE INDEX idx_individual_guitars_model ON individual_guitars(model_id);
+CREATE INDEX idx_individual_guitars_attestation_uid ON individual_guitars(attestation_uid);
+CREATE INDEX idx_individual_guitars_attestation_status ON individual_guitars(attestation_status);
 CREATE INDEX idx_specifications_model ON specifications(model_id);
 CREATE INDEX idx_specifications_individual ON specifications(individual_guitar_id);
 CREATE INDEX idx_citations_cited_record ON citations(cited_table, cited_record_id);
@@ -489,6 +570,28 @@ CREATE INDEX idx_images_tags ON images USING gin(tags) WHERE array_length(tags, 
 
 CREATE INDEX idx_image_sources_image ON image_sources(image_id);
 CREATE INDEX idx_image_sources_type ON image_sources(source_type);
+
+-- EAS attestation indexes
+CREATE INDEX idx_attestations_uid ON attestations(uid);
+CREATE INDEX idx_attestations_schema_uid ON attestations(schema_uid);
+CREATE INDEX idx_attestations_schema_type ON attestations(schema_type);
+CREATE INDEX idx_attestations_entity_type_id ON attestations(entity_type, entity_id);
+CREATE INDEX idx_attestations_schema_version ON attestations(schema_version);
+CREATE INDEX idx_attestations_status ON attestations(status);
+CREATE INDEX idx_attestations_signer_wallet ON attestations(signer_wallet);
+CREATE INDEX idx_attestations_cosigner_wallet ON attestations(cosigner_wallet);
+CREATE INDEX idx_attestations_signed_at ON attestations(signed_at);
+
+-- Schema versions indexes
+CREATE INDEX idx_schema_versions_name ON schema_versions(schema_name);
+CREATE INDEX idx_schema_versions_status ON schema_versions(status);
+CREATE INDEX idx_schema_versions_schema_uid ON schema_versions(schema_uid);
+CREATE INDEX idx_schema_versions_effective_date ON schema_versions(effective_date);
+
+-- Manufacturer wallets indexes
+CREATE INDEX idx_manufacturer_wallets_manufacturer_id ON manufacturer_wallets(manufacturer_id);
+CREATE INDEX idx_manufacturer_wallets_wallet_address ON manufacturer_wallets(wallet_address);
+CREATE INDEX idx_manufacturer_wallets_status ON manufacturer_wallets(status);
 
 -- ============================================================================
 -- TRIGGERS AND FUNCTIONS
@@ -717,15 +820,15 @@ COMMENT ON FUNCTION get_images_by_storage_key IS 'Returns all images (original a
 
 -- IMPORTANT: After running this script, you need to grant permissions to your application user:
 -- 
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO guitar_registry_user;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO guitar_registry_user;
--- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO guitar_registry_user;
--- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO guitar_registry_user;
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO string_authority_user;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO string_authority_user;
+-- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO string_authority_user;
+-- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO string_authority_user;
 --
--- Replace 'guitar_registry_user' with your actual application database user.
+-- Replace 'string_authority_user' with your actual application database user.
 --
 -- Example:
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO guitar_registry_user;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO guitar_registry_user;
--- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO guitar_registry_user;
--- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO guitar_registry_user; 
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO string_authority_user;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO string_authority_user;
+-- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO string_authority_user;
+-- GRANT SELECT ON ALL VIEWS IN SCHEMA public TO string_authority_user; 

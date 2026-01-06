@@ -1,10 +1,10 @@
-# Image Integration for Guitar Registry
+# Image Integration for String Authority database processor
 
-This document describes the enhanced image processing capabilities that have been integrated into the guitar registry system.
+This document describes the enhanced image processing capabilities that have been integrated into the String Authority database processor system.
 
 ## Overview
 
-The guitar registry now supports processing images from multiple sources:
+The String Authority database processor now supports processing images from multiple sources:
 - **Remote URLs** (HTTP/HTTPS)
 - **Local file paths** (absolute and relative)
 - **Mixed sources** within the same submission

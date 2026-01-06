@@ -2,29 +2,29 @@
 
 ## Drop database
 ```
-psql -d postgres -c "DROP database guitar_registry;
+psql -d postgres -c "DROP database string_authority;
 ```
 
 ## Create database
 ```
-psql -d postgres -c "CREATE DATABASE guitar_registry OWNER guitar_registry_user;"
+psql -d postgres -c "CREATE DATABASE string_authority OWNER string_authority_user;"
 ```
 
 ## Grant privileges
 ```
-psql -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE guitar_registry TO guitar_registry_user;
-GRANT ALL PRIVILEGES ON SCHEMA public TO guitar_registry_user;"
+psql -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE string_authority TO string_authority_user;
+GRANT ALL PRIVILEGES ON SCHEMA public TO string_authority_user;"
 ```
 
 ## Create extensions
 ```
-psql -U guitar_registry_user -d guitar_registry -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
-psql -d guitar_registry -c "CREATE EXTENSION IF NOT EXISTS \"pg_uuidv7\";"
+psql -U string_authority_user -d string_authority -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+psql -d string_authority -c "CREATE EXTENSION IF NOT EXISTS \"pg_uuidv7\";"
 ```
 
 ## Create structure
 ```
-psql -U guitar_registry_user -d guitar_registry -f database/create.sql
+psql -U string_authority_user -d string_authority -f database/create.sql
 ```
 
 Recommended: use the comprehensive shell script `database-recycle.sh` to create the database and structure.
@@ -37,7 +37,7 @@ Here's what the script does:
 ### **✅ Complete Automation:**
 1. **Drops existing database** (if it exists)
 2. **Creates new database** with proper ownership
-3. **Grants all privileges** to `guitar_registry_user`
+3. **Grants all privileges** to `string_authority_user`
 4. **Creates all required extensions** (uuid-ossp, pg_uuidv7, pg_trgm)
 5. **Runs the structure creation** from `database/create.sql`
 6. **Verifies the setup** and confirms all tables are empty
@@ -58,5 +58,4 @@ Here's what the script does:
 - Step-by-step progress with colored status messages
 - Confirmation that all tables are created and empty
 - Clear next steps for data processing
-
 

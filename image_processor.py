@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple Image Processor for Guitar Registry
+Simple Image Processor for String Authority database
 Uploads images to Cloudinary and saves metadata to database
 """
 
@@ -54,7 +54,7 @@ class ImageUploadResult:
     mime_type: str
 
 class SimpleImageProcessor:
-    """Simplified image processor for guitar registry"""
+    """Simplified image processor for String Authority database"""
     
     # Image size variants
     VARIANTS = {
@@ -217,7 +217,7 @@ class SimpleImageProcessor:
             eager_async=False,  # Wait for transformations to complete
             overwrite=False,
             resource_type='image',
-            tags=['guitar_registry'],
+            tags=['string_authority'],
             context={
                 'uploaded_at': datetime.now(timezone.utc).isoformat(),
                 'processor_version': '2.0'
@@ -283,7 +283,7 @@ class SimpleImageProcessor:
                 metadata['original_filename'], metadata['mime_type'], metadata['file_size'],
                 metadata['width'], metadata['height'],
                 metadata['aspect_ratio'], metadata['dominant_color'], uploaded_by,
-                ['guitar_registry', entity_type, image_type],
+                ['string_authority', entity_type, image_type],
                 f"Uploaded via SimpleImageProcessor at {datetime.now(timezone.utc).isoformat()}"
             ))
             
@@ -368,7 +368,7 @@ def load_config(cloudinary_config_path: str = "cloudinary_config.json", db_confi
     return ImageConfig(**config_data)
 
 def main():
-    parser = argparse.ArgumentParser(description="Upload images to Guitar Registry")
+    parser = argparse.ArgumentParser(description="Upload images to String Authority database")
     parser.add_argument("image_path", help="Path to image file")
     parser.add_argument("entity_type", help="Entity type (manufacturer, model, individual_guitar)")
     parser.add_argument("entity_id", help="UUID of the entity")

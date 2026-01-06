@@ -1,6 +1,6 @@
-# Guitar Registry Search API
+# String Authority Database Search API
 
-A Flask-based REST API for searching guitar models and individual instruments in the Guitar Registry database.
+A Flask-based REST API for searching guitar models and individual instruments in the String Authority database.
 
 ## Features
 
