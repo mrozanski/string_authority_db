@@ -1,4 +1,4 @@
-# Flask API dependencies for Guitar Registry Search API
+# Flask API dependencies for String Authority Database Search API
 flask>=3.0.0
 flask-cors>=4.0.0
 psycopg2>=2.9.10

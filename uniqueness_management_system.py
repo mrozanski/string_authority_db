@@ -1,4 +1,4 @@
-# Guitar Registry - Electric Guitar Provenance and Authentication System
+# String Authority Database - Electric Guitar Provenance and Authentication System
 # Copyright (C) 2025 Mariano Rozanski
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Guitar Registry Uniqueness Management System
+# String Authority Database Uniqueness Management System
 # JSON Schema + Python Pre-Insert Validation Approach
 
 from typing import Dict, List, Optional, Tuple, Any

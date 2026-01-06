@@ -1,5 +1,5 @@
 """
-Search API routes for the Guitar Registry.
+Search API routes for the String Authority Database.
 """
 
 from flask import Blueprint, request, jsonify, current_app

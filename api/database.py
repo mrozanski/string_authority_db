@@ -1,5 +1,5 @@
 """
-Database connection and query utilities for the Guitar Registry API.
+Database connection and query utilities for the String Authority Database Search API.
 """
 
 import psycopg2

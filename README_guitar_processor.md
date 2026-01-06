@@ -1,6 +1,6 @@
-# Guitar Registry - Complete Documentation
+# String Authority Database Processor - Complete Documentation
 
-This document describes the complete Guitar Registry system including JSON input structure, image processing workflow, and usage examples. This documentation is designed to be comprehensive enough for both human developers and LLM agents to prepare JSON data for ingestion.
+This document describes the complete String Authority database processor system including JSON input structure, image processing workflow, and usage examples. This documentation is designed to be comprehensive enough for both human developers and LLM agents to prepare JSON data for ingestion.
 
 ## Complete Submission Structure
 
@@ -460,7 +460,7 @@ Here's a complete example showing all components together:
 
 ## 8. Image Processing Workflow
 
-The Guitar Registry includes a comprehensive image processing system that automatically handles image uploads, metadata extraction, and database integration.
+The String Authority database processor includes a comprehensive image processing system that automatically handles image uploads, metadata extraction, and database integration.
 
 ### Quick Reference
 
@@ -646,7 +646,7 @@ The CLI supports both single submissions and batch processing with arrays of sub
 
 ## 11. Smart Matching & Flexibility
 
-The Guitar Registry system includes intelligent matching capabilities to make data ingestion more flexible while maintaining data integrity:
+The String Authority database processor system includes intelligent matching capabilities to make data ingestion more flexible while maintaining data integrity:
 
 ### **Case-Insensitive Name Matching**
 - **Manufacturer names**: "Fender", "fender", "FENDER" all resolve to the same manufacturer

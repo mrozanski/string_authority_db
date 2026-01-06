@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Guitar Registry - Electric Guitar Provenance and Authentication System
+# String Authority Database - Electric Guitar Provenance and Authentication System
 # Copyright (C) 2025 Mariano Rozanski
 #
 # This program is free software: you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 # (at your option) any later version.
 
 """
-Guitar Registry Search API
+String Authority Database Search API
 Flask REST API for searching guitar models and individual instruments.
 """
 

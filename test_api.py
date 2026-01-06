@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Simple test script for the Guitar Registry Search API endpoints.
+Simple test script for the String Authority Database Search API endpoints.
 """
 
 import sys
@@ -92,7 +92,7 @@ def test_search_services():
 def run_tests():
     """Run all tests."""
     print("=" * 50)
-    print("Guitar Registry API Test Suite")
+    print("String Authority Database Search API Test Suite")
     print("=" * 50)
     
     tests = [
