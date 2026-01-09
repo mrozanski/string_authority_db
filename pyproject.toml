@@ -5,10 +5,18 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "cloudinary>=1.44.1",
     "colormath>=3.0.0",
     "flask>=3.0.0",
     "flask-cors>=4.0.0",
+    "guitar-registry-shared-models",
     "jsonschema>=4.24.0",
+    "pillow>=12.1.0",
     "psycopg2>=2.9.10",
+    "psycopg2-binary>=2.9.11",
+    "pydantic>=2.12.5",
     "requests>=2.32.4",
 ]
+
+[tool.uv.sources]
+guitar-registry-shared-models = { path = "../guitar-registry-shared-models", editable = true }
