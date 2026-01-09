@@ -28,7 +28,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import jsonschema
 from difflib import SequenceMatcher
-from guitar_registry_shared_models.validation import validate_individual_components
+from sa_models.validation import validate_individual_components
 from pydantic import ValidationError
 import importlib.metadata
 

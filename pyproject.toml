@@ -9,7 +9,7 @@ dependencies = [
     "colormath>=3.0.0",
     "flask>=3.0.0",
     "flask-cors>=4.0.0",
-    "guitar-registry-shared-models",
+    "sa-models",
     "jsonschema>=4.24.0",
     "pillow>=12.1.0",
     "psycopg2>=2.9.10",
@@ -19,4 +19,4 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-guitar-registry-shared-models = { path = "../guitar-registry-shared-models", editable = true }
+sa-models = { path = "../sa-models", editable = true }
